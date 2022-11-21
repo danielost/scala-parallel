@@ -3,7 +3,7 @@
 #include <math.h>
 
 const int SIZE = 1000;
-const int ITERATIONS_AM = 3;
+const int ITERATIONS_AM = 10;
 
 double m1[SIZE][SIZE];
 double m2[SIZE][SIZE];
@@ -12,12 +12,12 @@ double res[SIZE][SIZE];
 using namespace std;
 
 void multiplyMatrices(double m1[][SIZE], double m2[][SIZE]) {
-    int i, j, k;
-#pragma omp parallel for private(i,j,k) shared(m1,m2,res)
-    for (i = 0; i < SIZE; ++i) {
-        for (j = 0; j < SIZE; ++j) {
-            for (k = 0; k < SIZE; ++k) {
-                res[i][j] += m1[i][k] * m2[k][j];
+    int row, col, i;
+#pragma omp parallel for private(row, col, i) shared(m1,m2,res)
+    for (row = 0; row < SIZE; row++) {
+        for (col = 0; col < SIZE; col++) {
+            for (i = 0; i < SIZE; i++) {
+                res[row][col] += m1[row][i] * m2[i][col];
             }
         }
     }
